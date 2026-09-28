@@ -1,0 +1,21 @@
+---
+# tasks file for roles/apache
+- name: instalar apache
+  yum:
+    name: httpd
+    state: present
+- name: levantar servicio
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+- name: habilitar puertos apache en firewall
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+- name: copiar
+  template:
+    src: /var/lib/awx/projects/webinar/index.html.j2
+    dest: /var/www/html/index.html
+  notify: reinicia-apache
